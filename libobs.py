@@ -227,8 +227,8 @@ class Obs(object):
         for bs in bs_list:
             if bs['state'] != 'published':
                 status = Obs.STATUS_BUILDING
-                reason += "%s %s is publishing repo" %
-                          (bs['repository'], bs['arch'])
+                reason += "%s %s is publishing repo" % (
+                    bs['repository'], bs['arch'])
 
             sc = bs['statuscount']
             for building_key in Obs._BUILD_STATUS_BUILDING_LIST:
