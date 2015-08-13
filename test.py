@@ -35,6 +35,7 @@ obs_obj = Obs(username, password, project)
 
 print "Invoking service remote run for project: '%s' for package '%s'" % \
     (project, package)
+
 obs_obj.service_remoterun(package)
 
 while(1):

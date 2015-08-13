@@ -225,10 +225,10 @@ class Obs(object):
                 "Provided project has not repository or package")
 
         for bs in bs_list:
-            if bs['state'] != 'published':
+            if bs['state'] != 'published' and bs['state'] != 'building':
                 status = Obs.STATUS_BUILDING
-                reason += "%s %s is publishing repo" % (
-                    bs['repository'], bs['arch'])
+                reason += "%s %s repo is %s" % (
+                    bs['repository'], bs['arch'], bs['state'])
 
             sc = bs['statuscount']
             for building_key in Obs._BUILD_STATUS_BUILDING_LIST:
@@ -243,7 +243,7 @@ class Obs(object):
             for failed_key in Obs._BUILD_STATUS_FAILED_LIST:
                 if failed_key in sc.keys():
                     status = Obs.STATUS_BUILDING
-                    reason += "%s %s has %s packages in %s state" % \
+                    reason += "%s %s has %s packages in %s state. " % \
                               (bs['repository'], bs['arch'],
                                sc[failed_key], failed_key)
 
