@@ -1,10 +1,10 @@
-# python-libobs - Python binding for Open Build Service (OBS) REST API.
+# python-libobs - Python binding for Open Build Service REST API.
 
 Python binding for the [Open Build Service (OBS)][1] [REST API][2].
 
 Currently, only supporting(all I need right now):
-    * Trigger run of defined services in `_service` file
-    * Query project building status.
+  * Trigger run of defined services in `_service` file
+  * Query project building status.
 
 Please check `test.py` for sample:
 ```
