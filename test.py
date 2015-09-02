@@ -20,11 +20,31 @@
 from libobs import Obs
 import os
 import time
+import re
 
 username = os.environ.get("OBS_USER")
 password = os.environ.get("OBS_PASS")
 project = os.environ.get("OBS_PROJECT")
 package = os.environ.get("OBS_PKG")
+git_repo = os.environ.get("OBS_GIT_REPO")
+git_branch = os.environ.get("OBS_GIT_BRANCH")
+
+file_service = """
+<services>
+    <service name="tar_scm">
+        <param name="scm">git</param>
+        <param name="url">%s</param>
+        <param name="filename">libstoragemgmt</param>
+        <param name="versionprefix">1.3.git</param>
+        <param name="revision">%s</param>
+    </service>
+    <service name="recompress">
+        <param name="file">*git*.tar</param>
+        <param name="compression">gz</param>
+    </service>
+    <service name="set_version"/>
+</services>
+""" % (git_repo, git_branch)
 
 if not (username and password and project and package):
     print "Please defined these environment variables:"
@@ -33,10 +53,16 @@ if not (username and password and project and package):
 
 obs_obj = Obs(username, password, project)
 
-print "Invoking service remote run for project: '%s' for package '%s'" % \
-    (project, package)
 
+print "Uploading _service file"
+obs_obj.file_upload(package, "_service", file_service,
+                    "using %s repo %s branch" % (git_repo, git_branch))
+
+"""
+print "Invoking service remote run for project: '%s' for package '%s'" % \
+         (project, package)
 obs_obj.service_remoterun(package)
+"""
 
 while(1):
     status, reason = obs_obj.project_status()

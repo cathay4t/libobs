@@ -19,6 +19,7 @@
 
 import re
 import urllib2
+import urllib
 from cookielib import CookieJar
 
 
@@ -36,7 +37,7 @@ class ObsError(Exception):
             ObsError.BAD_AUTH
                 Invalid username or password.
             ObsError.EMPTY_PROJECT
-                Provided project has no pacakge or repository configured.
+                Provided project has no package or repository configured.
         message (string):
             Human friendly error message.
     """
@@ -249,3 +250,35 @@ class Obs(object):
 
         reason = reason.rstrip()
         return (status, reason)
+
+    def file_upload(self, package, file_name, file_content, commit_comment):
+        """
+        Usage:
+            Create/override certain file via:
+                PUT /source/<project_name>/<package_name>/<filename>
+        Args:
+            package (string)
+                The package name.
+            file_name (string)
+                The file name to create or overide.
+            file_content (string)
+                The file content.
+            commit_comment (string)
+                Comment string for osc commit.
+        Return:
+            void
+                Raise exception when error.
+        """
+        url = "%s/source/%s/%s/%s?%s" % (
+            self.apiurl, self.project, package, file_name,
+            urllib.urlencode({'comment': commit_comment}))
+
+        request = urllib2.Request(url, data=file_content)
+        request.get_method = lambda: 'PUT'
+        rc_obj = self._opener.open(request)
+        http_code = rc_obj.getcode()
+        if http_code != _HTTP_STATUS_OK:
+            raise ObsError(
+                http_code,
+                "file_upload() failed with http error "
+                "code %d, message %s" % (http_code, rc_obj.read()))

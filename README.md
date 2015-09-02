@@ -5,13 +5,17 @@ Python binding for the [Open Build Service (OBS)][1] [REST API][2].
 Currently, only supporting(all I need right now):
   * Trigger run of defined services in `_service` file
   * Query project building status.
+  * Upload(create or override) source file.
 
 Please check `test.py` for sample:
 ```
 env OBS_USER='cathay4t' \
     OBS_PASS='noidea' \
-    OBS_PROJECT='home:cathay4t:libstoragemgmt-git-rhel7' \
-    OBS_PKG="libstoragemgmt" ./test.py
+    OBS_PROJECT='home:cathay4t:libstoragemgmt-rhel7-test' \
+    OBS_PKG="libstoragemgmt" \
+    OBS_GIT_REPO="https://github.com/cathay4t/libstoragemgmt.git" \
+    OBS_GIT_BRANCH="fix_ontap_vri" \
+    ./test.py
 ```
 
 Licensed under GPLv3+.
